@@ -1,30 +1,98 @@
 [
   {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
+    "objectID": "posts/reaction-diffusion/index.html",
+    "href": "posts/reaction-diffusion/index.html",
+    "title": "Emergent Complexity: The Gray-Scott Model",
     "section": "",
-    "text": "This is a post with executable code."
+    "text": "yaml",
+    "crumbs": [
+      "Recent Work",
+      "Emergent Complexity: The Gray-Scott Model"
+    ]
+  },
+  {
+    "objectID": "posts/reaction-diffusion/index.html#the-mathematics-of-spots-and-stripes",
+    "href": "posts/reaction-diffusion/index.html#the-mathematics-of-spots-and-stripes",
+    "title": "Emergent Complexity: The Gray-Scott Model",
+    "section": "The Mathematics of Spots and Stripes",
+    "text": "The Mathematics of Spots and Stripes\nHow does a leopard get its spots? In 1952, Alan Turing proposed that complex biological patterns could arise from a simple system of two interacting chemicals: 1. Reaction: The chemicals react with each other (transforming structure). 2. Diffusion: The chemicals spread out across space.\nThis is known as a Reaction-Diffusion System. We can model it using Partial Differential Equations (PDEs). The specific flavor we are simulating here is the Gray-Scott Model:\n\\[\n\\begin{align}\n\\frac{\\partial u}{\\partial t} &= D_u \\nabla^2 u - uv^2 + F(1-u) \\\\\n\\frac{\\partial v}{\\partial t} &= D_v \\nabla^2 v + uv^2 - (k+F)v\n\\end{align}\n\\]\nWhere: * \\(u\\) and \\(v\\) are chemical concentrations. * \\(D_u, D_v\\) are diffusion rates. * \\(F\\) is the “Feed” rate (adding chemical \\(u\\)). * \\(k\\) is the “Kill” rate (removing chemical \\(v\\)).",
+    "crumbs": [
+      "Recent Work",
+      "Emergent Complexity: The Gray-Scott Model"
+    ]
+  },
+  {
+    "objectID": "posts/reaction-diffusion/index.html#interactive-simulation",
+    "href": "posts/reaction-diffusion/index.html#interactive-simulation",
+    "title": "Emergent Complexity: The Gray-Scott Model",
+    "section": "Interactive Simulation",
+    "text": "Interactive Simulation\nBelow is a live simulation running directly in your browser using Observable JS.\nInstructions: 1. Wait a moment for the pattern to grow from the center. 2. Click and Drag on the canvas to add more chemical manually. 3. Adjust Sliders: Change \\(F\\) and \\(k\\) to discover different “species” (Coral, Spots, Worms).\n\n\n\nCode\nviewof F = Inputs.range([0.01, 0.1], {label: \"Feed Rate (F)\", value: 0.0545, step: 0.0001})\nviewof k = Inputs.range([0.03, 0.07], {label: \"Kill Rate (k)\", value: 0.0620, step: 0.0001})\nviewof brushSize = Inputs.range([1, 50], {label: \"Brush Size\", value: 10, step: 1})\n\n// 2. The Canvas\ncanvas = DOM.canvas(800, 400)\n\n// 3. The Simulation Logic\n{\n  const ctx = canvas.getContext(\"2d\");\n  const w = canvas.width;\n  const h = canvas.height;\n  \n  // Initialize Grids\n  let u = new Float32Array(w * h).fill(1.0);\n  let v = new Float32Array(w * h).fill(0.0);\n  let u_next = new Float32Array(w * h).fill(1.0);\n  let v_next = new Float32Array(w * h).fill(0.0);\n  \n  // Seed a central square\n  for (let i = w/2 - 10; i &lt; w/2 + 10; i++) {\n    for (let j = h/2 - 10; j &lt; h/2 + 10; j++) {\n      v[j * w + i] = 1.0;\n    }\n  }\n\n  // Parameters\n  const Du = 0.2; // Diffusion u (Speed optimized)\n  const Dv = 0.1; // Diffusion v\n  const dt = 1.0;\n  \n  // Mouse Interaction\n  let isDrawing = false;\n  canvas.onmousedown = () =&gt; isDrawing = true;\n  canvas.onmouseup = () =&gt; isDrawing = false;\n  canvas.onmousemove = (e) =&gt; {\n    if (!isDrawing) return;\n    const rect = canvas.getBoundingClientRect();\n    const x = Math.floor((e.clientX - rect.left) / (rect.width/w));\n    const y = Math.floor((e.clientY - rect.top) / (rect.height/h));\n    \n    for(let dy=-brushSize; dy&lt;=brushSize; dy++) {\n        for(let dx=-brushSize; dx&lt;=brushSize; dx++) {\n            if (dx*dx + dy*dy &lt;= brushSize*brushSize) {\n                const idx = (y+dy)*w + (x+dx);\n                if (idx &gt;= 0 && idx &lt; w*h) v[idx] = 1.0;\n            }\n        }\n    }\n  };\n\n  // Main Loop\n  while (true) {\n    // Run multiple steps per frame for speed\n    for(let steps=0; steps&lt;8; steps++) {\n      for (let y = 1; y &lt; h - 1; y++) {\n        for (let x = 1; x &lt; w - 1; x++) {\n          const i = y * w + x;\n          \n          // Laplacian (Simple 5-point stencil)\n          const lapU = (u[i-1] + u[i+1] + u[i-w] + u[i+w] - 4*u[i]);\n          const lapV = (v[i-1] + v[i+1] + v[i-w] + v[i+w] - 4*v[i]);\n          \n          const uvv = u[i] * v[i] * v[i];\n          \n          // Gray-Scott Update\n          u_next[i] = u[i] + (Du * lapU - uvv + F * (1 - u[i])) * dt;\n          v_next[i] = v[i] + (Dv * lapV + uvv - (k + F) * v[i]) * dt;\n          \n          // Constrain\n          u_next[i] = Math.max(0, Math.min(1, u_next[i]));\n          v_next[i] = Math.max(0, Math.min(1, v_next[i]));\n        }\n      }\n      // Swap buffers\n      [u, u_next] = [u_next, u];\n      [v, v_next] = [v_next, v];\n    }\n    \n    // Render\n    const imgData = ctx.createImageData(w, h);\n    const data = imgData.data;\n    for (let i = 0; i &lt; w * h; i++) {\n        const val = v[i];\n        // Visualization: Map Chemical V to a Cyan/Blue color map\n        // R=0, G=255*val, B=255\n        data[4*i + 0] = 0;             // R\n        data[4*i + 1] = Math.floor(val * 255); // G\n        data[4*i + 2] = Math.floor(Math.min(255, val * 255 + 50)); // B\n        data[4*i + 3] = 255;           // Alpha\n    }\n    ctx.putImageData(imgData, 0, 0);\n    \n    yield canvas; // Wait for next animation frame\n  }\n}",
+    "crumbs": [
+      "Recent Work",
+      "Emergent Complexity: The Gray-Scott Model"
+    ]
+  },
+  {
+    "objectID": "posts/reaction-diffusion/index.html#the-python-implementation",
+    "href": "posts/reaction-diffusion/index.html#the-python-implementation",
+    "title": "Emergent Complexity: The Gray-Scott Model",
+    "section": "The Python Implementation",
+    "text": "The Python Implementation\nWhile the interactive demo above runs in JavaScript (for web speed), as Data Scientists we model this in Python using numpy for vectorized operations.\nThis implementation highlights how we can treat a physical system as matrix operations—a foundational concept in Scientific Machine Learning.\n\n\nCode\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.signal import convolve2d\n\ndef simulate_gray_scott(steps=2000):\n    # Parameters\n    N = 200\n    Du, Dv = 0.16, 0.08\n    F, k = 0.0545, 0.0620\n    dt = 1.0\n\n    # Grid initialization\n    U = np.ones((N, N))\n    V = np.zeros((N, N))\n    \n    # Initial disturbance in the center\n    mid = N//2\n    r = 10\n    U[mid-r:mid+r, mid-r:mid+r] = 0.50\n    V[mid-r:mid+r, mid-r:mid+r] = 0.25\n    \n    # Laplacian Kernel (3x3)\n    laplacian = np.array([[0.05, 0.2, 0.05],\n                          [0.2, -1.0, 0.2],\n                          [0.05, 0.2, 0.05]])\n\n    # Simulation Loop\n    for _ in range(steps):\n        Lu = convolve2d(U, laplacian, mode='same')\n        Lv = convolve2d(V, laplacian, mode='same')\n        \n        uvv = U * V * V\n        U += (Du * Lu - uvv + F * (1 - U)) * dt\n        V += (Dv * Lv + uvv - (k + F) * V) * dt\n\n    return V\n\n# Run and Plot\nV_final = simulate_gray_scott()\n\nplt.figure(figsize=(8,8))\nplt.imshow(V_final, cmap='inferno')\nplt.axis('off')\nplt.title(f\"Gray-Scott State at t=2000\")\nplt.show()",
+    "crumbs": [
+      "Recent Work",
+      "Emergent Complexity: The Gray-Scott Model"
+    ]
+  },
+  {
+    "objectID": "posts/reaction-diffusion/index.html#why-this-matters-for-data-science",
+    "href": "posts/reaction-diffusion/index.html#why-this-matters-for-data-science",
+    "title": "Emergent Complexity: The Gray-Scott Model",
+    "section": "Why This Matters for Data Science",
+    "text": "Why This Matters for Data Science\nReaction-diffusion systems are excellent examples of Emergence: complex patterns arising from simple local rules.\nIn Machine Learning, we often face the inverse problem: we see the complex pattern (the data), and we try to learn the local rules (the model). Understanding the forward physics allows us to build better Physics-Informed Neural Networks (PINNs) that respect conservation laws rather than just memorizing data points.",
+    "crumbs": [
+      "Recent Work",
+      "Emergent Complexity: The Gray-Scott Model"
+    ]
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "jaredmcollette.github.io",
+    "title": "\nI model complex systems\n",
     "section": "",
-    "text": "Post With Code\n\n\n\nnews\n\ncode\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\nDec 19, 2025\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\nTristan O’Malley\n\n\nDec 16, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "I model complex systems\n\n\nBridging Physical Dynamics and Machine Learning through mathematical exploration.\n\n\n\n\n\n\n\n\n\n\n\n\n\nEmergent Complexity: The Gray-Scott Model\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nJared Collette\n\n\nDec 19, 2025\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "Explorations"
+    ]
   },
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "About Me",
     "section": "",
-    "text": "About this blog"
+    "text": "I build mathematical models for complex data.\nI am a Data Scientist and Engineer with a background in modeling dynamic systems.\nMy expertise lies in translating real-world noise into mathematical signal. Whether the data comes from a biological sensor, a financial time-series, or a physical simulation, my approach remains the same: combine Rigorous Statistics with Modern Deep Learning.\n\n\n\n\n\n🤖  Machine Learning\nThe Engine\n\n\nArchitecting pipelines for high-dimensional, noisy, and unstructured data.\n\n\n\nDeep Learning: PyTorch, GNNs, Transformers\nData Engineering: SQL, Pandas, ETL Pipelines\nStrategy: Unsupervised Learning, Dimensionality Reduction\n\n\n\n\n\n📐  Quantitative Modeling\nThe Framework\n\n\nUsing applied mathematics to understand why a system behaves the way it does.\n\n\n\nSimulation: Monte Carlo, Agent-Based Modeling\nMath: Partial Differential Equations (PDEs), ODEs\nTime-Series: Stochastic Calculus, Signal Processing\nViz: Manim, Interactive Plotting\n\n\n\n\n\n🔬  Research & Design\nThe Methodology\n\n\nApplying the scientific method to business and engineering problems.\n\n\n\nExperimentation: A/B Testing, Hypothesis Testing\nSystems Thinking: Network Theory, Process Control\nCommunication: Translating complex math for stakeholders\n\n\n\n\n\n\n\n\nMy Background\nI come from a background in Computational Biophysics, where I solved some of the hardest data problems in science: low signal-to-noise ratios, complex spatial dependencies, and non-linear dynamics.\nI am now applying these “First-Principles” modeling techniques to broader challenges in Data Science and Machine Learning.",
+    "crumbs": [
+      "About"
+    ]
   },
   {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
     "title": "Welcome To My Blog",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts.",
+    "crumbs": [
+      "Recent Work",
+      "Welcome To My Blog"
+    ]
+  },
+  {
+    "objectID": "contact.html",
+    "href": "contact.html",
+    "title": "Contact",
+    "section": "",
+    "text": "Your Email\n    \n  \n\n  \n    Message\n    \n  \n\n  \n    Send Message",
+    "crumbs": [
+      "Contact"
+    ]
   }
 ]

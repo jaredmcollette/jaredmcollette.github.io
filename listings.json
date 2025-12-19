@@ -1,8 +1,12 @@
 [
   {
+    "listing": "/projects.html",
+    "items": []
+  },
+  {
     "listing": "/index.html",
     "items": [
-      "/posts/post-with-code/index.html",
+      "/posts/reaction-diffusion/index.html",
       "/posts/welcome/index.html"
     ]
   }

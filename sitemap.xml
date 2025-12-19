@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jaredmcollette.github.io/posts/post-with-code/index.html</loc>
-    <lastmod>2025-12-19T02:23:37.101Z</lastmod>
+    <loc>https://jaredmcollette.github.io/projects.html</loc>
+    <lastmod>2025-12-19T08:26:24.774Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jaredmcollette.github.io/posts/reaction-diffusion/index.html</loc>
+    <lastmod>2025-12-19T07:48:04.036Z</lastmod>
   </url>
   <url>
     <loc>https://jaredmcollette.github.io/index.html</loc>
-    <lastmod>2025-12-19T02:23:37.101Z</lastmod>
+    <lastmod>2025-12-19T08:25:31.245Z</lastmod>
   </url>
   <url>
     <loc>https://jaredmcollette.github.io/about.html</loc>
-    <lastmod>2025-12-19T02:23:37.101Z</lastmod>
+    <lastmod>2025-12-19T07:30:34.551Z</lastmod>
   </url>
   <url>
     <loc>https://jaredmcollette.github.io/posts/welcome/index.html</loc>
-    <lastmod>2025-12-19T02:23:37.101Z</lastmod>
+    <lastmod>2025-12-19T03:52:26.199Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jaredmcollette.github.io/contact.html</loc>
+    <lastmod>2025-12-19T08:15:58.118Z</lastmod>
   </url>
 </urlset>
