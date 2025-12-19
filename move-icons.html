@@ -1,0 +1,14 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1. Find the icons
+    var icons = document.querySelector('.sidebar-tools-main');
+    
+    // 2. Find the menu container (where 'Blog' and 'About' live)
+    var menu = document.querySelector('.sidebar-menu-container');
+    
+    // 3. Move icons immediately AFTER the menu
+    if (icons && menu) {
+      menu.after(icons);
+    }
+  });
+</script>

@@ -10,3 +10,5 @@ __pycache__/
 # Quarto outputs (optional, but good practice to keep repo small)
 /.quarto/
 /_site/
+**/*.quarto_ipynb
+/_freeze/

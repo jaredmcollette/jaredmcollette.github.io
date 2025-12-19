@@ -1,7 +1,7 @@
 ---
 title: "Welcome To My Blog"
-author: "Tristan O'Malley"
-date: "2025-12-16"
+author: "Jared Collette"
+date: "2025-12-19"
 categories: [news]
 ---
 

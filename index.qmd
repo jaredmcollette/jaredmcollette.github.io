@@ -1,15 +1,26 @@
 ---
-title: "jaredmcollette.github.io"
+# This controls the Browser Tab name (what Google sees)
+pagetitle: "Jared Collette | Explorations"
+
+# This leaves the page header empty so we can write our own
+title: ""
+
 listing:
   contents: posts
-  feed: true
   sort: "date desc"
   type: grid
-  categories: true
+  categories: false
   sort-ui: false
   filter-ui: false
 page-layout: full
-title-block-banner: true
+title-block-banner: false
 ---
 
+<!-- Custom Hero Header with some top margin for spacing -->
+<h1 style="font-weight: 700; margin-bottom: 0; color: white; margin-top: 20px;">
+  I model complex systems
+</h1>
 
+<h3 style="color: #d0d0d0; font-weight: 300; margin-top: 10px; margin-bottom: 60px; line-height: 1.5;">
+  Bridging <strong>Physical Dynamics</strong> and <strong>Machine Learning</strong> through mathematical exploration.
+</h3>

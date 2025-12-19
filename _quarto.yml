@@ -1,23 +1,44 @@
 project:
   type: website
+  resources:
+    - "images/"
 
 website:
   description: "A blog built with Quarto"
-  site-url: https://your-website-url.example.com # you must change this appropriately for RSS feeds to work properly
+  site-url: https://jaredmcollette.github.io
   title: "jaredmcollette.github.io"
-  navbar:
-    right:
-      - about.qmd
+  sidebar:
+    logo: "images/profile.jpg" 
+    title: "Jared Collette, PhD"
+    style: "docked"
+    search: false
+
+    tools:
       - icon: github
-        href: https://github.com/
-      - icon: twitter
-        href: https://twitter.com
+        href: https://github.com/jaredmcollette
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jared-collette-77559ba0/
+
+    contents:
+      - href: index.qmd
+        text: Explorations
+      - href: projects.qmd
+        text: Projects
+      - href: about.qmd
+        text: About
+      - href: contact.qmd
+        text: Contact
+
+      - section: "Recent Work"
+        contents: "posts/**/index.qmd" 
 format:
   html:
+    page-layout: full
     theme:
-      - cosmo
-      - brand
+      dark: cyborg
+      light: cosmo
     css: styles.css
+    include-after-body: move-icons.html
 
 
 

@@ -1,0 +1,32 @@
+---
+title: "Contact"
+page-layout: article
+sidebar: true
+---
+
+<br>
+
+```{=html}
+<!-- The {=html} tag tells Quarto: "Render this as a real form, not text" -->
+
+<form action="https://formspree.io/f/mrezbbla" method="POST" style="max-width: 600px;">
+  
+  <div style="margin-bottom: 20px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ccc;">Your Email</label>
+    <input type="email" name="email" required 
+           style="width: 100%; padding: 12px; background-color: #262626; border: 1px solid #444; color: white; border-radius: 6px; font-family: inherit;">
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #ccc;">Message</label>
+    <textarea name="message" rows="6" required
+              style="width: 100%; padding: 12px; background-color: #262626; border: 1px solid #444; color: white; border-radius: 6px; font-family: inherit;"></textarea>
+  </div>
+
+  <button type="submit" 
+          style="background-color: #2FA4E7; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: background 0.2s;">
+    Send Message
+  </button>
+
+</form>
+```

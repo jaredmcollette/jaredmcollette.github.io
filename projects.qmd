@@ -1,0 +1,15 @@
+---
+title: "Projects"
+subtitle: "Open source tools, machine learning models, and datasets."
+page-layout: full
+sidebar: true
+toc: false
+listing:
+  contents: projects
+  type: grid
+  fields: [image, title, description, categories]
+  sort: "date desc"
+  grid-columns: 2
+---
+
+## Featured Work
