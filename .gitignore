@@ -1,0 +1,12 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Quarto outputs (optional, but good practice to keep repo small)
+/.quarto/
+/_site/
